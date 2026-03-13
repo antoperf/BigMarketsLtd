@@ -490,7 +490,7 @@ textarea.form-input{min-height:70px;resize:none}
   body.m-intro{overflow:hidden;height:100vh;height:100svh}
   body.m-intro .phone-wrapper{
     position:fixed;top:0;left:0;
-    width:100vw;height:100svh;z-index:10;
+    width:100vw;height:100vh;height:100svh;z-index:10;
   }
   body.m-intro .phone{
     width:100%;height:100%;
@@ -498,13 +498,19 @@ textarea.form-input{min-height:70px;resize:none}
     background:linear-gradient(145deg,#1a1a1e 0%,#111114 50%,#0d0d10 100%);
     border-radius:40px;
     transform-origin:center center;
+    will-change:transform;
+    -webkit-animation:phoneZoom 2.4s cubic-bezier(0.25,0.1,0.25,1) forwards;
     animation:phoneZoom 2.4s cubic-bezier(0.25,0.1,0.25,1) forwards;
   }
-  @keyframes phoneZoom{
-    0%,30%{transform:scale(0.6);border-radius:40px;opacity:1}
-    100%{transform:scale(1);border-radius:0;opacity:1}
+  @-webkit-keyframes phoneZoom{
+    0%,30%{-webkit-transform:scale(0.55);transform:scale(0.55);border-radius:40px}
+    100%{-webkit-transform:scale(1);transform:scale(1);border-radius:0}
   }
-  /* nebula — single blurred glow, fades out */
+  @keyframes phoneZoom{
+    0%,30%{transform:scale(0.55);border-radius:40px}
+    100%{transform:scale(1);border-radius:0}
+  }
+  /* nebula glow */
   body.m-intro .phone-wrapper::before{
     content:'';position:absolute;
     top:50%;left:50%;transform:translate(-50%,-50%);
@@ -514,14 +520,19 @@ textarea.form-input{min-height:70px;resize:none}
       radial-gradient(circle at 35% 40%, rgba(255,77,0,0.28) 0%, transparent 55%),
       radial-gradient(circle at 70% 55%, rgba(140,40,220,0.22) 0%, transparent 50%),
       radial-gradient(circle at 50% 70%, rgba(60,80,255,0.14) 0%, transparent 55%);
-    filter:blur(40px);
+    filter:blur(40px);-webkit-filter:blur(40px);
+    -webkit-animation:nebulaFade 2.4s ease forwards;
     animation:nebulaFade 2.4s ease forwards;
+  }
+  @-webkit-keyframes nebulaFade{
+    0%,30%{opacity:1}
+    65%,100%{opacity:0}
   }
   @keyframes nebulaFade{
     0%,30%{opacity:1}
     65%,100%{opacity:0}
   }
-  body.m-intro .phone-edge{display:block;animation:nebulaFade 2.4s ease forwards}
+  body.m-intro .phone-edge{display:block;-webkit-animation:nebulaFade 2.4s ease forwards;animation:nebulaFade 2.4s ease forwards}
   body.m-intro .phone::before{
     position:absolute;top:12px;left:50%;transform:translateX(-50%);
     width:80px;height:26px;background:#000;border-radius:14px;z-index:30;
@@ -530,22 +541,27 @@ textarea.form-input{min-height:70px;resize:none}
     display:block;
     content:'';position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
     width:100px;height:4px;background:#333;border-radius:3px;z-index:30;
-    animation:nebulaFade 2.4s ease forwards;
+    -webkit-animation:nebulaFade 2.4s ease forwards;animation:nebulaFade 2.4s ease forwards;
   }
-  body.m-intro .phone-reflection{display:block;animation:nebulaFade 2.4s ease forwards}
+  body.m-intro .phone-reflection{display:block;-webkit-animation:nebulaFade 2.4s ease forwards;animation:nebulaFade 2.4s ease forwards}
   body.m-intro .screen{
-    position:absolute;inset:6px;overflow:hidden;height:auto;
-    border-radius:34px;
+    position:absolute;top:6px;right:6px;bottom:6px;left:6px;
+    overflow:hidden;border-radius:34px;
+    -webkit-animation:screenZoom 2.4s cubic-bezier(0.25,0.1,0.25,1) forwards;
     animation:screenZoom 2.4s cubic-bezier(0.25,0.1,0.25,1) forwards;
   }
+  @-webkit-keyframes screenZoom{
+    0%,30%{top:6px;right:6px;bottom:6px;left:6px;border-radius:34px}
+    100%{top:0;right:0;bottom:0;left:0;border-radius:0}
+  }
   @keyframes screenZoom{
-    0%,30%{inset:6px;border-radius:34px}
-    100%{inset:0;border-radius:0}
+    0%,30%{top:6px;right:6px;bottom:6px;left:6px;border-radius:34px}
+    100%{top:0;right:0;bottom:0;left:0;border-radius:0}
   }
   body.m-intro .section{min-height:100%;overflow:hidden}
   body.m-intro .hero{min-height:100%;padding-top:56px;justify-content:center}
-  body.m-intro .atmo{display:block !important;animation:nebulaFade 2.4s ease forwards}
-  body.m-intro .stars-canvas{display:block !important;animation:nebulaFade 2.4s ease forwards}
+  body.m-intro .atmo{display:block !important;-webkit-animation:nebulaFade 2.4s ease forwards;animation:nebulaFade 2.4s ease forwards}
+  body.m-intro .stars-canvas{display:block !important;-webkit-animation:nebulaFade 2.4s ease forwards;animation:nebulaFade 2.4s ease forwards}
   body.m-intro .nav-dots-mobile{display:none !important}
   body.m-intro .hero .reveal{opacity:1;transform:translateY(0)}
   /* ── MOBILE TEXT TRANSITIONS — fade in + slide up ── */
@@ -1092,12 +1108,15 @@ textarea.form-input{min-height:70px;resize:none}
     }
     var phone = document.querySelector('.phone');
     if(phone){
-      phone.addEventListener('animationend', function handler(e){
-        if(e.animationName==='phoneZoom'){
-          phone.removeEventListener('animationend', handler);
+      function onEnd(e){
+        if(e.animationName==='phoneZoom'||e.animationName==='-webkit-phoneZoom'){
+          phone.removeEventListener('animationend', onEnd);
+          phone.removeEventListener('webkitAnimationEnd', onEnd);
           clearIntro();
         }
-      });
+      }
+      phone.addEventListener('animationend', onEnd);
+      phone.addEventListener('webkitAnimationEnd', onEnd);
     }
     setTimeout(clearIntro, 2600);
   }
