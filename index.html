@@ -486,7 +486,7 @@ textarea.form-input{min-height:70px;resize:none}
   .stat-num{font-size:36px}
   .contact-form input,.contact-form textarea{font-size:16px}
 
-  /* ── MOBILE INTRO — phone starts far away ── */
+  /* ── MOBILE INTRO — phone starts far, zooms to fill screen ── */
   body.m-intro{overflow:hidden;height:100vh;height:100svh}
   body.m-intro .phone-wrapper{
     position:fixed;top:50%;left:50%;
@@ -494,57 +494,52 @@ textarea.form-input{min-height:70px;resize:none}
     width:auto;height:auto;z-index:10;
   }
   body.m-intro .phone{
-    width:62vw;height:calc(62vw * 2.05);max-height:78vh;
-    border-radius:40px;border:1.5px solid #3a3a3e;
+    border:1.5px solid #3a3a3e;
     background:linear-gradient(145deg,#1a1a1e 0%,#111114 50%,#0d0d10 100%);
-    box-shadow:
-      0 0 0 1px rgba(255,255,255,0.04),
-      0 30px 80px rgba(0,0,0,0.7),
-      0 0 80px rgba(255,77,0,0.06);
-    transition:width 1.6s cubic-bezier(0.4,0,0.2,1),
-               height 1.6s cubic-bezier(0.4,0,0.2,1),
-               border-radius 1.6s cubic-bezier(0.4,0,0.2,1),
-               border-color 1.2s ease,
-               box-shadow 1.2s ease;
+    animation:phoneZoom 2.8s cubic-bezier(0.4,0,0.2,1) forwards;
   }
-  body.m-intro .phone-edge{display:block;transition:opacity 1.2s ease}
+  @keyframes phoneZoom{
+    0%,35%{
+      width:62vw;height:calc(62vw * 2.05);max-height:78vh;
+      border-radius:40px;border-color:#3a3a3e;
+      box-shadow:0 0 0 1px rgba(255,255,255,0.04),0 30px 80px rgba(0,0,0,0.7),0 0 80px rgba(255,77,0,0.06);
+    }
+    100%{
+      width:100vw;height:100svh;max-height:none;
+      border-radius:0;border-color:transparent;
+      box-shadow:none;
+    }
+  }
+  body.m-intro .phone-edge{display:block;animation:introFade 2.8s ease forwards}
   body.m-intro .phone::before{
     position:absolute;top:12px;left:50%;transform:translateX(-50%);
     width:80px;height:26px;background:#000;border-radius:14px;z-index:30;
-    box-shadow:inset 0 0 4px rgba(255,255,255,0.03);
-    transition:all 1.4s ease;
   }
   body.m-intro .phone::after{
     display:block;
     content:'';position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
     width:100px;height:4px;background:#333;border-radius:3px;z-index:30;
-    transition:opacity 1s ease;
+    animation:introFade 2.8s ease forwards;
   }
-  body.m-intro .phone-reflection{display:block;transition:opacity 1.2s ease}
+  body.m-intro .phone-reflection{display:block;animation:introFade 2.8s ease forwards}
   body.m-intro .screen{
-    position:absolute;inset:6px;border-radius:34px;
-    overflow:hidden;height:auto;
-    transition:inset 1.6s cubic-bezier(0.4,0,0.2,1),
-               border-radius 1.6s cubic-bezier(0.4,0,0.2,1);
+    position:absolute;overflow:hidden;height:auto;
+    animation:screenZoom 2.8s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+  @keyframes screenZoom{
+    0%,35%{inset:6px;border-radius:34px}
+    100%{inset:0;border-radius:0}
+  }
+  @keyframes introFade{
+    0%,35%{opacity:1}
+    70%,100%{opacity:0}
   }
   body.m-intro .section{min-height:100%;overflow:hidden}
   body.m-intro .hero{min-height:100%;padding-top:56px;justify-content:center}
-  body.m-intro .atmo{display:block !important;opacity:1;transition:opacity 1.4s ease}
-  body.m-intro .stars-canvas{display:block !important;opacity:1;transition:opacity 1.4s ease}
+  body.m-intro .atmo{display:block !important;animation:introFade 2.8s ease forwards}
+  body.m-intro .stars-canvas{display:block !important;animation:introFade 2.8s ease forwards}
   body.m-intro .nav-dots-mobile{display:none !important}
-
-  /* ── ZOOM STATE — phone expands to fill screen ── */
-  body.m-zoom .phone{
-    width:100vw;height:100vh;height:100svh;max-height:none;
-    border-radius:0;border-color:transparent;
-    box-shadow:none;background:var(--bg);
-  }
-  body.m-zoom .phone-edge{opacity:0}
-  body.m-zoom .phone::after{opacity:0}
-  body.m-zoom .phone-reflection{opacity:0}
-  body.m-zoom .screen{inset:0;border-radius:0}
-  body.m-zoom .atmo{opacity:0 !important}
-  body.m-zoom .stars-canvas{opacity:0 !important}
+  body.m-intro .hero .reveal{opacity:1;transform:translateY(0)}
 }
 @media(min-width:501px){
   .nav-dots-mobile{display:none !important}
@@ -552,6 +547,7 @@ textarea.form-input{min-height:70px;resize:none}
 </style>
 </head>
 <body>
+<script>if(window.matchMedia('(max-width:500px)').matches)document.body.classList.add('m-intro');</script>
 
 <!-- Noise overlay -->
 <svg class="noise" width="100%" height="100%">
@@ -1073,14 +1069,25 @@ textarea.form-input{min-height:70px;resize:none}
   });
 
   /* ── MOBILE INTRO ── */
-  var isMobile = window.matchMedia('(max-width:500px)').matches;
-  if(isMobile){
-    document.body.classList.add('m-intro');
-    setTimeout(function(){ document.body.classList.add('m-zoom'); }, 1200);
-    setTimeout(function(){
+  if(document.body.classList.contains('m-intro')){
+    var introCleared = false;
+    function clearIntro(){
+      if(introCleared) return;
+      introCleared = true;
       window.scrollTo(0,0);
-      document.body.classList.remove('m-intro','m-zoom');
-    }, 3200);
+      document.body.classList.remove('m-intro');
+      onScroll();
+    }
+    var phone = document.querySelector('.phone');
+    if(phone){
+      phone.addEventListener('animationend', function handler(e){
+        if(e.animationName==='phoneZoom'){
+          phone.removeEventListener('animationend', handler);
+          clearIntro();
+        }
+      });
+    }
+    setTimeout(clearIntro, 3000);
   }
 
 })();
