@@ -454,17 +454,39 @@ textarea.form-input{min-height:70px;resize:none}
     width:100%;height:auto;min-height:auto;max-height:none;
     border-radius:0;border:none;box-shadow:none;background:var(--bg);
   }
-  .phone::before,.phone::after,.phone-btn,.phone-reflection{display:none}
+  .phone-edge{display:none}
+  /* Keep dynamic island as subtle status bar nod */
+  .phone::before{
+    position:fixed;top:8px;left:50%;transform:translateX(-50%);
+    width:90px;height:26px;background:rgba(0,0,0,0.85);
+    border-radius:16px;z-index:60;
+    box-shadow:0 0 12px rgba(0,0,0,0.5);
+  }
+  .phone::after,.phone-btn,.phone-reflection{display:none}
   .screen{
     position:relative;inset:auto;border-radius:0;
     overflow-y:visible;height:auto;
   }
-  .section{min-height:100vh}
-  .side-info,.top-bar,.nav-dots,.atmo .orbital,.bg-words{display:none}
+  .section{min-height:auto;padding:48px 24px 36px}
+  .hero{min-height:auto;padding-top:80px;padding-bottom:60px;justify-content:flex-start}
+  .hero-scroll{display:none}
+  .side-info,.top-bar,.nav-dots,.atmo .orbital,.bg-words,.stars-canvas,.atmo{display:none}
+  .noise{opacity:0.03}
+  /* Minimal mobile header */
   .nav-dots-mobile{
     display:flex !important;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
-    z-index:50;gap:10px;
+    z-index:50;gap:10px;background:rgba(5,5,8,0.6);
+    padding:6px 14px;border-radius:20px;backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,0.06);
   }
+  .nav-dots-mobile .dot{width:6px;height:6px}
+  /* Section tweaks for mobile */
+  .hero-name{font-size:clamp(38px,12vw,52px)}
+  .timeline-heading,.brands-heading,.stats-heading,.network-heading,.contact-heading{font-size:24px}
+  .net-map{height:260px}
+  .rain-num{font-size:clamp(32px,11vw,42px)}
+  .stat-num{font-size:36px}
+  .contact-form input,.contact-form textarea{font-size:16px}
 }
 @media(min-width:501px){
   .nav-dots-mobile{display:none !important}
@@ -551,7 +573,7 @@ textarea.form-input{min-height:70px;resize:none}
     <div class="screen" id="screen">
 
       <!-- S1: Hero -->
-      <div class="section" id="s0">
+      <div class="section hero" id="s0">
         <div class="section-label reveal">01 &mdash; Welcome</div>
         <h1 class="hero-name reveal">Big<br>Market</h1>
         <div class="hero-ltd reveal">Ltd</div>
