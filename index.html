@@ -357,6 +357,36 @@ textarea.form-input{min-height:70px;resize:none}
 .reveal{opacity:0;transform:translateY(14px);transition:all 0.6s cubic-bezier(0.25,0.46,0.45,0.94)}
 .reveal.visible{opacity:1;transform:translateY(0)}
 
+/* ── BACKGROUND WORDS ── */
+.bg-words{
+  position:fixed;inset:0;
+  z-index:5;pointer-events:none;
+  overflow:hidden;
+}
+.bg-words-track{
+  position:absolute;left:50%;
+  display:flex;flex-direction:column;align-items:center;
+  will-change:transform;
+  transition:transform 0.8s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.bg-word{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:clamp(180px,28vw,400px);
+  line-height:1;
+  text-transform:uppercase;
+  letter-spacing:-0.04em;
+  color:rgba(255,77,0,0.02);
+  filter:blur(16px);
+  white-space:nowrap;
+  padding:25vh 0;
+  transition:all 0.8s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.bg-word.active{
+  color:rgba(255,77,0,0.08);
+  filter:blur(6px);
+}
+
 /* ── RESPONSIVE ── */
 @media(max-width:500px){
   body{overflow-y:auto;height:auto}
@@ -371,7 +401,7 @@ textarea.form-input{min-height:70px;resize:none}
     overflow-y:visible;height:auto;
   }
   .section{min-height:100vh}
-  .side-info,.top-bar,.nav-dots,.atmo .orbital{display:none}
+  .side-info,.top-bar,.nav-dots,.atmo .orbital,.bg-words{display:none}
   .nav-dots-mobile{
     display:flex !important;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
     z-index:50;gap:10px;
@@ -402,6 +432,17 @@ textarea.form-input{min-height:70px;resize:none}
   <div class="orbital orbital-1"><div class="orbital-dot"></div></div>
   <div class="orbital orbital-2"><div class="orbital-dot"></div></div>
   <div class="orbital orbital-3"><div class="orbital-dot"></div></div>
+</div>
+
+<!-- Background words -->
+<div class="bg-words">
+  <div class="bg-words-track" id="bgWordsTrack">
+    <div class="bg-word active">Welcome</div>
+    <div class="bg-word">History</div>
+    <div class="bg-word">Partners</div>
+    <div class="bg-word">Scale</div>
+    <div class="bg-word">Connect</div>
+  </div>
 </div>
 
 <!-- Top bar -->
@@ -696,10 +737,38 @@ textarea.form-input{min-height:70px;resize:none}
     updateDots(activeIdx);
   }
 
-  screen.addEventListener('scroll', checkReveals, {passive:true});
+  /* ── BACKGROUND WORDS SCROLL SYNC ── */
+  const bgTrack = document.getElementById('bgWordsTrack');
+  const bgWords = bgTrack.querySelectorAll('.bg-word');
+
+  function updateBgWords(activeIdx){
+    // Translate track so active word is vertically centered on screen
+    const vpCenter = window.innerHeight / 2;
+    const word = bgWords[activeIdx];
+    const wordCenter = word.offsetTop + word.offsetHeight / 2;
+    const offset = vpCenter - wordCenter;
+    bgTrack.style.transform = `translate(-50%, ${offset}px)`;
+    bgWords.forEach((w,i)=>{
+      w.classList.toggle('active', i===activeIdx);
+    });
+  }
+
+  function onScroll(){
+    checkReveals();
+    // Determine active section
+    let activeIdx = 0;
+    sections.forEach((s,i)=>{
+      const sRect = screen.getBoundingClientRect();
+      const eRect = s.getBoundingClientRect();
+      if(eRect.top <= sRect.top + sRect.height*0.5) activeIdx = i;
+    });
+    updateBgWords(activeIdx);
+  }
+
+  screen.addEventListener('scroll', onScroll, {passive:true});
   // Initial check + delayed check for first paint
-  checkReveals();
-  setTimeout(checkReveals, 100);
+  onScroll();
+  setTimeout(onScroll, 100);
 
   /* ── NAV DOTS ── */
   function updateDots(idx){
