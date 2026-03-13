@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Big Market Ltd — Electronics Distribution Since 1992</title>
+<meta name="description" content="Big Market Ltd — Over 30 years of electronics and mobile phone distribution across Europe.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── RESET ── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#050508;
+  --fg:#e8e8e8;
+  --fg-dim:#aaa;
+  --fg-muted:#666;
+  --accent:#ff4d00;
+  --accent2:#2a4fff;
+  --mono:'JetBrains Mono',monospace;
+  --display:'Outfit',sans-serif;
+  --phone-w:340px;
+  --phone-h:82vh;
+  --phone-radius:48px;
+  --phone-bezel:7px;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:var(--mono);
+  font-weight:300;
+  font-size:13px;
+  line-height:1.7;
+  overflow:hidden;
+  height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:#ff4d0044;color:var(--fg)}
+
+/* ── NOISE ── */
+.noise{
+  position:fixed;inset:0;z-index:100;pointer-events:none;
+  opacity:0.055;mix-blend-mode:overlay;
+}
+
+/* ── ATMOSPHERE — SPACE ── */
+.atmo{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+/* Nebula blobs — bigger and more vivid */
+.blob{
+  position:absolute;border-radius:50%;
+  filter:blur(140px);
+  animation:blobDrift 25s ease-in-out infinite alternate;
+}
+.blob-1{width:800px;height:800px;background:radial-gradient(circle,#ff4d0022 0%,#ff4d0008 40%,transparent 70%);top:-15%;left:-10%;animation-delay:0s}
+.blob-2{width:700px;height:700px;background:radial-gradient(circle,#2a4fff1c 0%,#1a1fff06 40%,transparent 70%);bottom:-10%;right:-12%;animation-delay:-8s}
+.blob-3{width:500px;height:500px;background:radial-gradient(circle,#8b00ff12 0%,transparent 70%);top:40%;left:55%;animation-delay:-16s}
+.blob-4{width:400px;height:400px;background:radial-gradient(circle,#ff4d000e 0%,transparent 70%);bottom:20%;left:10%;animation-delay:-12s}
+@keyframes blobDrift{
+  0%{transform:translate(0,0) scale(1) rotate(0deg)}
+  33%{transform:translate(40px,-30px) scale(1.08) rotate(2deg)}
+  66%{transform:translate(-30px,40px) scale(0.92) rotate(-1deg)}
+  100%{transform:translate(15px,15px) scale(1.04) rotate(1deg)}
+}
+/* Stars canvas */
+.stars-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+/* Orbital rings */
+.orbital{position:fixed;border-radius:50%;border:1px solid;pointer-events:none;z-index:1}
+.orbital-1{width:650px;height:650px;top:50%;left:50%;margin-top:-325px;margin-left:-325px;border-color:#ff4d001a;animation:orbitSpin 50s linear infinite}
+.orbital-2{width:450px;height:450px;top:50%;left:50%;margin-top:-225px;margin-left:-225px;border-color:#2a4fff16;animation:orbitSpin 38s linear infinite reverse}
+.orbital-3{width:850px;height:850px;top:50%;left:50%;margin-top:-425px;margin-left:-425px;border-color:#8b00ff0c;animation:orbitSpin 70s linear infinite}
+.orbital-dot{
+  position:absolute;width:5px;height:5px;border-radius:50%;
+  background:var(--accent);opacity:0.6;
+  box-shadow:0 0 6px currentColor;
+}
+.orbital-1 .orbital-dot{top:0;left:50%;margin-left:-2.5px;margin-top:-2.5px}
+.orbital-2 .orbital-dot{bottom:0;left:50%;margin-left:-2.5px;margin-bottom:-2.5px;background:var(--accent2)}
+.orbital-3 .orbital-dot{top:50%;right:0;margin-top:-2.5px;margin-right:-2.5px;background:#8b00ff;opacity:0.4}
+@keyframes orbitSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+
+/* ── PHONE FRAME ── */
+.phone-wrapper{
+  position:fixed;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  z-index:10;
+  perspective:1200px;
+}
+.phone{
+  width:var(--phone-w);
+  height:var(--phone-h);
+  min-height:640px;
+  max-height:800px;
+  background:linear-gradient(145deg,#1a1a1e 0%,#111114 50%,#0d0d10 100%);
+  border-radius:var(--phone-radius);
+  border:1.5px solid #3a3a3e;
+  position:relative;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04),
+    0 2px 0 0 rgba(255,255,255,0.06),
+    0 -1px 0 0 rgba(255,255,255,0.03),
+    0 30px 80px rgba(0,0,0,0.7),
+    0 10px 30px rgba(0,0,0,0.5),
+    0 0 80px rgba(255,77,0,0.06),
+    0 0 160px rgba(42,79,255,0.03),
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 -1px 0 rgba(255,255,255,0.02);
+  transform-style:preserve-3d;
+  transition:transform 0.12s ease-out;
+}
+/* Edge highlight that catches light */
+.phone-edge{
+  position:absolute;inset:-1px;border-radius:var(--phone-radius);
+  background:linear-gradient(135deg,rgba(255,255,255,0.12) 0%,transparent 30%,transparent 70%,rgba(255,255,255,0.04) 100%);
+  pointer-events:none;z-index:2;
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask-composite:exclude;-webkit-mask-composite:xor;
+  padding:1.5px;
+}
+/* Dynamic island */
+.phone::before{
+  content:'';position:absolute;
+  top:12px;left:50%;transform:translateX(-50%);
+  width:120px;height:34px;
+  background:#000;border-radius:20px;
+  z-index:30;
+  box-shadow:inset 0 0 4px rgba(255,255,255,0.03);
+}
+/* Home bar */
+.phone::after{
+  content:'';position:absolute;
+  bottom:8px;left:50%;transform:translateX(-50%);
+  width:130px;height:5px;
+  background:#333;border-radius:3px;z-index:30;
+}
+/* Side buttons */
+.phone-btn{
+  position:absolute;background:#1a1a1a;z-index:5;
+  border-radius:2px;
+}
+.phone-btn-power{right:-3px;top:180px;width:3px;height:60px}
+.phone-btn-vol-up{left:-3px;top:150px;width:3px;height:35px}
+.phone-btn-vol-dn{left:-3px;top:200px;width:3px;height:35px}
+.phone-btn-silent{left:-3px;top:110px;width:3px;height:18px;border-radius:3px}
+/* Screen reflection */
+.phone-reflection{
+  position:absolute;inset:0;border-radius:var(--phone-radius);
+  background:
+    linear-gradient(135deg,rgba(255,255,255,0.07) 0%,rgba(255,255,255,0.02) 25%,transparent 50%),
+    linear-gradient(315deg,rgba(255,255,255,0.03) 0%,transparent 30%);
+  pointer-events:none;z-index:25;
+}
+/* Screen area */
+.screen{
+  position:absolute;
+  top:var(--phone-bezel);bottom:var(--phone-bezel);
+  left:var(--phone-bezel);right:var(--phone-bezel);
+  border-radius:calc(var(--phone-radius) - var(--phone-bezel));
+  overflow-y:auto;overflow-x:hidden;
+  background:var(--bg);
+  scrollbar-width:none;
+  scroll-behavior:smooth;
+}
+.screen::-webkit-scrollbar{display:none}
+
+/* ── OUTSIDE PHONE: SIDE INFO ── */
+.side-info{
+  position:fixed;z-index:5;
+  font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+  color:#444;writing-mode:vertical-rl;
+}
+.side-left{left:clamp(16px,3vw,60px);top:50%;transform:translateY(-50%) rotate(180deg)}
+.side-right{right:clamp(16px,3vw,60px);bottom:40px;top:auto;transform:none}
+
+/* ── OUTSIDE PHONE: TOP BAR ── */
+.top-bar{
+  position:fixed;top:24px;left:0;right:0;z-index:20;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 clamp(20px,4vw,80px);
+  font-family:var(--mono);
+}
+.top-bar-logo{font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:#555}
+.top-bar-est{font-size:10px;letter-spacing:0.3em;color:#333}
+
+/* ── NAV DOTS ── */
+.nav-dots{
+  position:fixed;right:clamp(12px,2.5vw,50px);top:50%;transform:translateY(-50%);
+  z-index:20;display:flex;flex-direction:column;gap:14px;
+}
+.nav-dot{
+  width:8px;height:8px;border-radius:50%;
+  border:1px solid #333;background:transparent;
+  cursor:pointer;transition:all 0.3s ease;
+  padding:0;
+}
+.nav-dot.active{background:var(--accent);border-color:var(--accent);box-shadow:0 0 8px rgba(255,77,0,0.3)}
+.nav-dot:hover{border-color:#666}
+
+/* ── CONTENT SECTIONS (inside phone) ── */
+.section{
+  min-height:100%;
+  padding:60px 28px 40px;
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;
+}
+.section-label{
+  font-family:var(--mono);font-size:11px;letter-spacing:0.3em;
+  text-transform:uppercase;color:var(--fg-muted);margin-bottom:12px;
+}
+
+/* ── HERO ── */
+.hero-name{
+  font-family:var(--display);font-size:48px;font-weight:600;
+  line-height:1;letter-spacing:-0.03em;color:var(--fg);
+  margin-bottom:4px;
+}
+.hero-ltd{
+  font-family:var(--mono);font-size:13px;letter-spacing:0.4em;
+  text-transform:uppercase;color:var(--fg-muted);margin-bottom:24px;
+}
+.hero-tagline{
+  font-family:var(--mono);font-size:13px;line-height:1.8;
+  color:var(--fg-dim);max-width:300px;min-height:3.6em;
+}
+.hero-tagline .cursor{
+  display:inline-block;width:7px;height:14px;
+  background:var(--accent);margin-left:2px;
+  animation:blink 1s step-end infinite;vertical-align:text-bottom;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.hero-scroll{
+  position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.hero-scroll span{font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#444}
+.scroll-line{width:1px;height:24px;background:linear-gradient(to bottom,#444,transparent);animation:scrollPulse 2s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:0.3;transform:scaleY(0.7)}50%{opacity:1;transform:scaleY(1)}}
+
+/* ── TIMELINE ── */
+.timeline{padding-top:70px;padding-bottom:50px;justify-content:flex-start}
+.timeline-heading{
+  font-family:var(--display);font-size:28px;font-weight:500;
+  letter-spacing:-0.02em;color:var(--fg);margin-bottom:6px;line-height:1.15;
+}
+.timeline-sub{font-size:13px;color:var(--fg-dim);margin-bottom:28px;line-height:1.7}
+.tl-item{
+  display:flex;gap:16px;margin-bottom:24px;position:relative;
+  opacity:0;transform:translateY(12px);
+  transition:all 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.tl-item.visible{opacity:1;transform:translateY(0)}
+.tl-track{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:20px}
+.tl-dot{
+  width:10px;height:10px;border-radius:50%;
+  border:2px solid #333;background:var(--bg);
+  flex-shrink:0;transition:all 0.3s ease;
+}
+.tl-item.visible .tl-dot{border-color:var(--accent);background:var(--accent);box-shadow:0 0 8px rgba(255,77,0,0.3)}
+.tl-line{width:1px;flex:1;background:#1a1a1a;margin-top:4px}
+.tl-content{padding-bottom:4px}
+.tl-year{
+  font-family:var(--display);font-size:22px;font-weight:600;
+  color:var(--accent);line-height:1;margin-bottom:4px;
+}
+.tl-title{font-size:13px;font-weight:400;color:var(--fg);margin-bottom:4px}
+.tl-desc{font-size:12px;color:var(--fg-dim);line-height:1.7}
+
+/* ── BRANDS ── */
+.brands{padding-top:70px;justify-content:flex-start}
+.brands-heading{
+  font-family:var(--display);font-size:28px;font-weight:500;
+  letter-spacing:-0.02em;color:var(--fg);margin-bottom:6px;line-height:1.15;
+}
+.brands-sub{font-size:13px;color:var(--fg-dim);margin-bottom:24px;line-height:1.7}
+.brand-card{
+  background:#0c0c0e;border:1px solid #1a1a1a;border-radius:12px;
+  padding:20px;margin-bottom:10px;
+  opacity:0;transform:translateY(12px);
+  transition:all 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.brand-card.visible{opacity:1;transform:translateY(0)}
+.brand-card:hover{border-color:#2a2a2a}
+.brand-name{
+  font-family:var(--display);font-size:20px;font-weight:600;
+  letter-spacing:-0.01em;margin-bottom:2px;
+}
+.brand-name.xiaomi{color:#ff6900}
+.brand-name.apple{color:#e0e0e0}
+.brand-name.samsung{color:#1e6fff}
+.brand-cat{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#555;margin-bottom:6px}
+.brand-desc{font-size:12px;color:var(--fg-dim);line-height:1.7}
+.brands-more{
+  text-align:center;padding:16px;
+  font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#444;
+  border:1px dashed #1a1a1a;border-radius:12px;margin-top:4px;
+}
+
+/* ── STATS ── */
+.stats{justify-content:center;text-align:center}
+.stats-heading{
+  font-family:var(--display);font-size:28px;font-weight:500;
+  letter-spacing:-0.02em;color:var(--fg);margin-bottom:6px;line-height:1.15;
+}
+.stats-sub{font-size:13px;color:var(--fg-dim);margin-bottom:32px;line-height:1.7}
+.stat-block{margin-bottom:28px}
+.stat-num{
+  font-family:var(--display);font-size:42px;font-weight:700;
+  line-height:1;margin-bottom:4px;
+}
+.stat-num.orange{color:var(--accent)}
+.stat-num.blue{color:var(--accent2)}
+.stat-num.white{color:var(--fg)}
+.stat-label{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#555}
+
+/* ── CONTACT ── */
+.contact{padding-top:70px;justify-content:flex-start}
+.contact-heading{
+  font-family:var(--display);font-size:26px;font-weight:500;
+  letter-spacing:-0.02em;color:var(--fg);margin-bottom:6px;line-height:1.15;
+}
+.contact-sub{font-size:13px;color:var(--fg-dim);margin-bottom:20px;line-height:1.7}
+.form-input{
+  width:100%;background:#0a0a0c;
+  border:1px solid #1a1a1a;border-radius:8px;
+  padding:10px 12px;font-family:var(--mono);font-size:11px;
+  color:var(--fg);margin-bottom:8px;
+  outline:none;transition:border-color 0.2s ease;
+}
+.form-input::placeholder{color:#444;font-size:10px}
+.form-input:focus{border-color:var(--accent)}
+.form-row{display:flex;gap:8px}
+.form-row .form-input{flex:1}
+textarea.form-input{min-height:70px;resize:none}
+.form-btn{
+  width:100%;background:var(--accent);color:#0a0a0a;
+  border:none;border-radius:8px;padding:12px;
+  font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:0.2em;text-transform:uppercase;
+  cursor:pointer;transition:all 0.15s ease;
+}
+.form-btn:hover{background:#ff6622;transform:translateY(-1px)}
+.form-btn:active{transform:translateY(0)}
+.contact-channels{margin-top:24px;padding-top:20px;border-top:1px solid #1a1a1a}
+.channel{margin-bottom:14px}
+.channel-label{font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:#555;margin-bottom:2px}
+.channel-value{font-size:13px;color:#888;text-decoration:none;transition:color 0.15s}
+.channel-value:hover{color:var(--accent)}
+.channel-hint{font-size:10px;color:#333;margin-top:1px}
+.contact-footer{
+  text-align:center;margin-top:28px;padding-top:16px;border-top:1px solid #111;
+  font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:#333;
+}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(14px);transition:all 0.6s cubic-bezier(0.25,0.46,0.45,0.94)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:500px){
+  body{overflow-y:auto;height:auto}
+  .phone-wrapper{position:relative;top:auto;left:auto;transform:none;width:100%;height:auto}
+  .phone{
+    width:100%;height:auto;min-height:auto;max-height:none;
+    border-radius:0;border:none;box-shadow:none;background:var(--bg);
+  }
+  .phone::before,.phone::after,.phone-btn,.phone-reflection{display:none}
+  .screen{
+    position:relative;inset:auto;border-radius:0;
+    overflow-y:visible;height:auto;
+  }
+  .section{min-height:100vh}
+  .side-info,.top-bar,.nav-dots,.atmo .orbital{display:none}
+  .nav-dots-mobile{
+    display:flex !important;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+    z-index:50;gap:10px;
+  }
+}
+@media(min-width:501px){
+  .nav-dots-mobile{display:none !important}
+}
+</style>
+</head>
+<body>
+
+<!-- Noise overlay -->
+<svg class="noise" width="100%" height="100%">
+  <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch"/></filter>
+  <rect width="100%" height="100%" filter="url(#n)"/>
+</svg>
+
+<!-- Stars -->
+<canvas class="stars-canvas" id="starsCanvas"></canvas>
+
+<!-- Atmosphere -->
+<div class="atmo">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="orbital orbital-1"><div class="orbital-dot"></div></div>
+  <div class="orbital orbital-2"><div class="orbital-dot"></div></div>
+  <div class="orbital orbital-3"><div class="orbital-dot"></div></div>
+</div>
+
+<!-- Top bar -->
+<div class="top-bar">
+  <div class="top-bar-logo">Big Market Ltd</div>
+  <div class="top-bar-est">Est. 1992</div>
+</div>
+
+<!-- Side text -->
+<div class="side-info side-left">Authorized Distribution</div>
+<div class="side-info side-right">Milan &mdash; Europe</div>
+
+<!-- Nav dots -->
+<div class="nav-dots" id="navDots">
+  <button class="nav-dot active" data-idx="0" aria-label="Hero"></button>
+  <button class="nav-dot" data-idx="1" aria-label="Timeline"></button>
+  <button class="nav-dot" data-idx="2" aria-label="Brands"></button>
+  <button class="nav-dot" data-idx="3" aria-label="Stats"></button>
+  <button class="nav-dot" data-idx="4" aria-label="Contact"></button>
+</div>
+
+<!-- Mobile nav dots -->
+<div class="nav-dots-mobile" id="navDotsMobile">
+  <button class="nav-dot active" data-idx="0"></button>
+  <button class="nav-dot" data-idx="1"></button>
+  <button class="nav-dot" data-idx="2"></button>
+  <button class="nav-dot" data-idx="3"></button>
+  <button class="nav-dot" data-idx="4"></button>
+</div>
+
+<!-- Phone -->
+<div class="phone-wrapper" id="phoneWrapper">
+  <div class="phone" id="phone">
+    <div class="phone-edge"></div>
+    <div class="phone-btn phone-btn-power"></div>
+    <div class="phone-btn phone-btn-vol-up"></div>
+    <div class="phone-btn phone-btn-vol-dn"></div>
+    <div class="phone-btn phone-btn-silent"></div>
+    <div class="phone-reflection"></div>
+
+    <div class="screen" id="screen">
+
+      <!-- S1: Hero -->
+      <div class="section" id="s0">
+        <div class="section-label reveal">01 &mdash; Welcome</div>
+        <h1 class="hero-name reveal">Big<br>Market</h1>
+        <div class="hero-ltd reveal">Ltd</div>
+        <div class="hero-tagline reveal" id="typewriter"></div>
+        <div class="hero-scroll">
+          <span>Scroll</span>
+          <div class="scroll-line"></div>
+        </div>
+      </div>
+
+      <!-- S2: Timeline -->
+      <div class="section timeline" id="s1">
+        <div class="section-label reveal">02 &mdash; Our Story</div>
+        <h2 class="timeline-heading reveal">Forward,<br>always.</h2>
+        <p class="timeline-sub reveal">Three decades of building the infrastructure that keeps Europe's retailers stocked and competitive.</p>
+
+        <div class="tl-item" data-delay="0">
+          <div class="tl-track"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div class="tl-content">
+            <div class="tl-year">1992</div>
+            <div class="tl-title">The foundation</div>
+            <div class="tl-desc">Started as a small electronics shop in Milan. One phone brand, one warehouse, and the conviction that mobile was about to change everything.</div>
+          </div>
+        </div>
+        <div class="tl-item" data-delay="100">
+          <div class="tl-track"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div class="tl-content">
+            <div class="tl-year">1998</div>
+            <div class="tl-title">Mobile enters the picture</div>
+            <div class="tl-desc">Pivoted fully to mobile phone distribution. Signed first major carrier partnerships and expanded warehouse capacity across Northern Italy.</div>
+          </div>
+        </div>
+        <div class="tl-item" data-delay="200">
+          <div class="tl-track"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div class="tl-content">
+            <div class="tl-year">2017</div>
+            <div class="tl-title">The refurbished play</div>
+            <div class="tl-desc">Launched a certified pre-owned division. Gave retailers access to Grade-A refurbished inventory with full warranty backing and competitive margins.</div>
+          </div>
+        </div>
+        <div class="tl-item" data-delay="300">
+          <div class="tl-track"><div class="tl-dot"></div></div>
+          <div class="tl-content">
+            <div class="tl-year">2021</div>
+            <div class="tl-title">Full scale, full catalog</div>
+            <div class="tl-desc">Now distributing 20+ brands to retailers across Europe. From flagships to entry-level, new to refurbished &mdash; every segment, every price point.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- S3: Brands -->
+      <div class="section brands" id="s2">
+        <div class="section-label reveal">03 &mdash; Partners</div>
+        <h2 class="brands-heading reveal">The brands<br>that move.</h2>
+        <p class="brands-sub reveal">We hold authorized distribution agreements with the world's most sought-after mobile brands.</p>
+
+        <div class="brand-card" data-delay="0">
+          <div class="brand-name xiaomi">Xiaomi</div>
+          <div class="brand-cat">Full ecosystem partner</div>
+          <div class="brand-desc">Complete Xiaomi product lineup including Redmi, POCO, and IoT ecosystem. One of the largest authorized Xiaomi distributors in Southern Europe.</div>
+        </div>
+        <div class="brand-card" data-delay="100">
+          <div class="brand-name apple">Apple</div>
+          <div class="brand-cat">Premium tier</div>
+          <div class="brand-desc">iPhone, iPad, Mac, and accessories. Authorized supply chain with guaranteed provenance and full manufacturer warranty coverage.</div>
+        </div>
+        <div class="brand-card" data-delay="200">
+          <div class="brand-name samsung">Samsung</div>
+          <div class="brand-cat">Galaxy ecosystem</div>
+          <div class="brand-desc">Galaxy S, A, and M series plus tablets and wearables. Deep inventory across the entire Samsung mobile portfolio.</div>
+        </div>
+        <div class="brands-more reveal">+ 20 more brands in our catalog</div>
+      </div>
+
+      <!-- S4: Stats -->
+      <div class="section stats" id="s3">
+        <div class="section-label reveal">04 &mdash; Scale</div>
+        <h2 class="stats-heading reveal">Numbers that<br>speak.</h2>
+        <p class="stats-sub reveal">Built over three decades of relentless execution.</p>
+
+        <div class="stat-block reveal">
+          <div class="stat-num orange" data-target="30" data-suffix="+">0</div>
+          <div class="stat-label">Years in the business</div>
+        </div>
+        <div class="stat-block reveal">
+          <div class="stat-num blue" data-target="1" data-suffix="M+">0</div>
+          <div class="stat-label">Phones distributed</div>
+        </div>
+        <div class="stat-block reveal">
+          <div class="stat-num white" data-target="20" data-suffix="+">0</div>
+          <div class="stat-label">Brand partnerships</div>
+        </div>
+      </div>
+
+      <!-- S5: Contact -->
+      <div class="section contact" id="s4">
+        <div class="section-label reveal">05 &mdash; Connect</div>
+        <h2 class="contact-heading reveal">Start the<br><span style="color:var(--accent)">conversation</span>.</h2>
+        <p class="contact-sub reveal">Whether you run a single-location shop or a multi-country retail chain, we have the inventory, pricing, and logistics to make your phone department the most profitable corner of your store.</p>
+
+        <form id="contactForm" class="reveal">
+          <div class="form-row">
+            <input class="form-input" placeholder="Company" required>
+            <input class="form-input" placeholder="Your name" required>
+          </div>
+          <input class="form-input" type="email" placeholder="Email" required>
+          <textarea class="form-input" placeholder="Tell us about your distribution needs..."></textarea>
+          <button type="submit" class="form-btn">Send inquiry</button>
+        </form>
+
+        <div class="contact-channels reveal">
+          <div class="channel">
+            <div class="channel-label">Phone</div>
+            <a class="channel-value" href="tel:+390000000000">+39 000 000 0000</a>
+            <div class="channel-hint">Mon &ndash; Fri, 9:00 &ndash; 18:00 CET</div>
+          </div>
+          <div class="channel">
+            <div class="channel-label">WhatsApp</div>
+            <a class="channel-value" href="https://wa.me/390000000000">+39 000 000 0000</a>
+            <div class="channel-hint">Quick response</div>
+          </div>
+          <div class="channel">
+            <div class="channel-label">Email</div>
+            <a class="channel-value" href="mailto:info@bigmarket.it">info@bigmarket.it</a>
+            <div class="channel-hint">General inquiries</div>
+          </div>
+        </div>
+
+        <div class="contact-footer">&copy; 2026 Big Market Ltd &mdash; All rights reserved</div>
+      </div>
+
+    </div><!-- /screen -->
+  </div><!-- /phone -->
+</div><!-- /phone-wrapper -->
+
+<script>
+(function(){
+  /* ── STARS ── */
+  const cvs = document.getElementById('starsCanvas');
+  const ctx = cvs.getContext('2d');
+  function resizeStars(){ cvs.width = window.innerWidth; cvs.height = window.innerHeight; }
+  resizeStars();
+  window.addEventListener('resize', resizeStars);
+  const stars = [];
+  for(let i=0;i<120;i++){
+    stars.push({
+      x: Math.random()*cvs.width,
+      y: Math.random()*cvs.height,
+      r: Math.random()*1.5+0.3,
+      a: Math.random()*0.6+0.1,
+      speed: Math.random()*0.008+0.003,
+      phase: Math.random()*Math.PI*2
+    });
+  }
+  function drawStars(t){
+    ctx.clearRect(0,0,cvs.width,cvs.height);
+    stars.forEach(s=>{
+      const flicker = Math.sin(t*s.speed+s.phase)*0.3+0.7;
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle = `rgba(255,255,255,${s.a*flicker})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(drawStars);
+  }
+  requestAnimationFrame(drawStars);
+
+  const screen = document.getElementById('screen');
+  const phone = document.getElementById('phone');
+  const sections = screen.querySelectorAll('.section');
+  const dots = document.querySelectorAll('.nav-dot');
+
+  /* ── TYPEWRITER ── */
+  const phrases = [
+    "Europe's largest independent mobile phone distributor.",
+    "30+ years supplying retailers across the continent.",
+    "From Milan to the world — authorized, certified, trusted."
+  ];
+  let phraseIdx = 0, charIdx = 0, deleting = false;
+  const tw = document.getElementById('typewriter');
+  function typeStep(){
+    const phrase = phrases[phraseIdx];
+    if(!deleting){
+      charIdx++;
+      tw.innerHTML = phrase.slice(0,charIdx) + '<span class="cursor"></span>';
+      if(charIdx === phrase.length){
+        setTimeout(()=>{deleting=true;typeStep()},2200);
+        return;
+      }
+      setTimeout(typeStep, 30 + Math.random()*40);
+    } else {
+      charIdx--;
+      tw.innerHTML = phrase.slice(0,charIdx) + '<span class="cursor"></span>';
+      if(charIdx === 0){
+        deleting = false;
+        phraseIdx = (phraseIdx+1) % phrases.length;
+        setTimeout(typeStep, 400);
+        return;
+      }
+      setTimeout(typeStep, 15);
+    }
+  }
+  setTimeout(typeStep, 800);
+
+  /* ── SCROLL-BASED REVEALS (transforms break IntersectionObserver root) ── */
+  const allRevealable = screen.querySelectorAll('.reveal, .tl-item, .brand-card');
+  const statNums = screen.querySelectorAll('.stat-num[data-target]');
+
+  function isInScreen(el){
+    const sRect = screen.getBoundingClientRect();
+    const eRect = el.getBoundingClientRect();
+    return eRect.top < sRect.bottom - 40 && eRect.bottom > sRect.top + 40;
+  }
+
+  function checkReveals(){
+    allRevealable.forEach(el=>{
+      if(el.classList.contains('visible')) return;
+      if(isInScreen(el)){
+        const d = parseInt(el.dataset.delay||0);
+        if(d>0) setTimeout(()=>el.classList.add('visible'),d);
+        else el.classList.add('visible');
+      }
+    });
+    // Stat counters
+    statNums.forEach(el=>{
+      if(el.dataset.counted) return;
+      if(isInScreen(el)){
+        el.dataset.counted = '1';
+        const target = parseInt(el.dataset.target);
+        const suffix = el.dataset.suffix || '';
+        let current = 0;
+        const step = Math.max(1, Math.ceil(target/20));
+        (function count(){
+          current += step;
+          if(current >= target){ el.textContent = target + suffix; return; }
+          el.textContent = current + suffix;
+          requestAnimationFrame(count);
+        })();
+      }
+    });
+    // Active section for nav dots
+    let activeIdx = 0;
+    sections.forEach((s,i)=>{
+      const sRect = screen.getBoundingClientRect();
+      const eRect = s.getBoundingClientRect();
+      if(eRect.top <= sRect.top + sRect.height*0.5) activeIdx = i;
+    });
+    updateDots(activeIdx);
+  }
+
+  screen.addEventListener('scroll', checkReveals, {passive:true});
+  // Initial check + delayed check for first paint
+  checkReveals();
+  setTimeout(checkReveals, 100);
+
+  /* ── NAV DOTS ── */
+  function updateDots(idx){
+    dots.forEach(d=>{
+      d.classList.toggle('active', parseInt(d.dataset.idx)===idx);
+    });
+  }
+  dots.forEach(d=>{
+    d.addEventListener('click',()=>{
+      const idx = parseInt(d.dataset.idx);
+      const target = sections[idx];
+      screen.scrollTo({top: target.offsetTop, behavior:'smooth'});
+    });
+  });
+
+  /* ── MOUSE PARALLAX ── */
+  if(window.matchMedia('(min-width:501px)').matches){
+    document.addEventListener('mousemove',(e)=>{
+      const cx = window.innerWidth/2, cy = window.innerHeight/2;
+      const dx = (e.clientX - cx)/cx;
+      const dy = (e.clientY - cy)/cy;
+      phone.style.transform = `rotateY(${dx*8}deg) rotateX(${-dy*10}deg)`;
+    });
+  }
+
+  /* ── CONTACT FORM ── */
+  document.getElementById('contactForm').addEventListener('submit',function(ev){
+    ev.preventDefault();
+    const inputs = this.querySelectorAll('.form-input');
+    const company = inputs[0].value;
+    const name = inputs[1].value;
+    const email = inputs[2].value;
+    const msg = inputs[3].value;
+    const subject = encodeURIComponent('Inquiry from '+company);
+    const body = encodeURIComponent('From: '+name+' ('+company+')\nEmail: '+email+'\n\n'+msg);
+    window.location.href = 'mailto:info@bigmarket.it?subject='+subject+'&body='+body;
+  });
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+bigmarket-artifact/
+artifact.html
+.claude/
+.superpowers/
+node_modules/
+.DS_Store
