@@ -314,6 +314,65 @@ body{
 .stat-num.white{color:var(--fg)}
 .stat-label{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#555}
 
+/* ── NETWORK MAP ── */
+.network{padding-top:70px;padding-bottom:40px;justify-content:flex-start}
+.network-heading{
+  font-family:var(--display);font-size:28px;font-weight:500;
+  letter-spacing:-0.02em;color:var(--fg);margin-bottom:6px;line-height:1.15;
+}
+.network-sub{font-size:13px;color:var(--fg-dim);margin-bottom:20px;line-height:1.7}
+.net-map{position:relative;width:100%;height:320px;margin-bottom:16px}
+.net-map svg{position:absolute;inset:0;width:100%;height:100%}
+.net-line{
+  stroke:var(--accent);stroke-width:1;fill:none;opacity:0.3;
+  stroke-dasharray:6 4;
+  animation:netDash 2s linear infinite;
+}
+@keyframes netDash{to{stroke-dashoffset:-20}}
+.net-city{
+  position:absolute;transform:translate(-50%,-50%);
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+}
+.net-dot{
+  width:6px;height:6px;border-radius:50%;background:#555;
+  transition:all 0.5s ease;
+}
+.net-city.visible .net-dot{background:var(--fg-dim);box-shadow:0 0 6px rgba(255,255,255,0.2)}
+.net-label{
+  font-family:var(--mono);font-size:8px;letter-spacing:0.15em;
+  text-transform:uppercase;color:#444;white-space:nowrap;
+  transition:color 0.5s ease;
+}
+.net-city.visible .net-label{color:#777}
+.net-malta{z-index:2}
+.net-malta .net-dot{
+  width:14px;height:14px;background:var(--accent);
+  box-shadow:0 0 20px rgba(255,77,0,0.5),0 0 40px rgba(255,77,0,0.2);
+  animation:maltaPulse 2s ease-in-out infinite;
+}
+.net-malta .net-label{color:var(--accent);font-size:10px;font-weight:500;letter-spacing:0.2em}
+@keyframes maltaPulse{
+  0%,100%{box-shadow:0 0 20px rgba(255,77,0,0.5),0 0 40px rgba(255,77,0,0.2)}
+  50%{box-shadow:0 0 30px rgba(255,77,0,0.7),0 0 60px rgba(255,77,0,0.3)}
+}
+.net-stat{text-align:center;font-size:11px;color:#555;letter-spacing:0.15em;text-transform:uppercase}
+.net-stat span{color:var(--accent);font-family:var(--display);font-weight:600;font-size:14px}
+
+/* ── DEVICE RAIN ── */
+.rain{justify-content:center;text-align:center;position:relative;overflow:hidden}
+.rain-canvas{position:absolute;inset:0;z-index:0}
+.rain-content{position:relative;z-index:1}
+.rain-num{
+  font-family:var(--display);font-size:56px;font-weight:700;
+  line-height:1;color:var(--fg);margin-bottom:8px;
+  text-shadow:0 0 40px rgba(255,77,0,0.3);
+}
+.rain-label{
+  font-family:var(--mono);font-size:11px;letter-spacing:0.25em;
+  text-transform:uppercase;color:var(--fg-muted);margin-bottom:20px;
+}
+.rain-desc{font-size:12px;color:var(--fg-dim);line-height:1.7;max-width:260px;margin:0 auto}
+
 /* ── CONTACT ── */
 .contact{padding-top:70px;justify-content:flex-start}
 .contact-heading{
@@ -440,6 +499,8 @@ textarea.form-input{min-height:70px;resize:none}
     <div class="bg-word active">Welcome</div>
     <div class="bg-word">History</div>
     <div class="bg-word">Partners</div>
+    <div class="bg-word">Reach</div>
+    <div class="bg-word">Volume</div>
     <div class="bg-word">Scale</div>
     <div class="bg-word">Connect</div>
   </div>
@@ -453,15 +514,17 @@ textarea.form-input{min-height:70px;resize:none}
 
 <!-- Side text -->
 <div class="side-info side-left">Authorized Distribution</div>
-<div class="side-info side-right">Milan &mdash; Europe</div>
+<div class="side-info side-right">Malta &mdash; Europe</div>
 
 <!-- Nav dots -->
 <div class="nav-dots" id="navDots">
   <button class="nav-dot active" data-idx="0" aria-label="Hero"></button>
   <button class="nav-dot" data-idx="1" aria-label="Timeline"></button>
   <button class="nav-dot" data-idx="2" aria-label="Brands"></button>
-  <button class="nav-dot" data-idx="3" aria-label="Stats"></button>
-  <button class="nav-dot" data-idx="4" aria-label="Contact"></button>
+  <button class="nav-dot" data-idx="3" aria-label="Network"></button>
+  <button class="nav-dot" data-idx="4" aria-label="Volume"></button>
+  <button class="nav-dot" data-idx="5" aria-label="Stats"></button>
+  <button class="nav-dot" data-idx="6" aria-label="Contact"></button>
 </div>
 
 <!-- Mobile nav dots -->
@@ -471,6 +534,8 @@ textarea.form-input{min-height:70px;resize:none}
   <button class="nav-dot" data-idx="2"></button>
   <button class="nav-dot" data-idx="3"></button>
   <button class="nav-dot" data-idx="4"></button>
+  <button class="nav-dot" data-idx="5"></button>
+  <button class="nav-dot" data-idx="6"></button>
 </div>
 
 <!-- Phone -->
@@ -508,7 +573,7 @@ textarea.form-input{min-height:70px;resize:none}
           <div class="tl-content">
             <div class="tl-year">1992</div>
             <div class="tl-title">The foundation</div>
-            <div class="tl-desc">Started as a small electronics shop in Milan. One phone brand, one warehouse, and the conviction that mobile was about to change everything.</div>
+            <div class="tl-desc">Started as a small electronics operation in Malta. One phone brand, one warehouse, and the conviction that mobile was about to change everything.</div>
           </div>
         </div>
         <div class="tl-item" data-delay="100">
@@ -516,7 +581,7 @@ textarea.form-input{min-height:70px;resize:none}
           <div class="tl-content">
             <div class="tl-year">1998</div>
             <div class="tl-title">Mobile enters the picture</div>
-            <div class="tl-desc">Pivoted fully to mobile phone distribution. Signed first major carrier partnerships and expanded warehouse capacity across Northern Italy.</div>
+            <div class="tl-desc">Pivoted fully to mobile phone distribution. Signed first major carrier partnerships and expanded warehouse capacity across the Mediterranean.</div>
           </div>
         </div>
         <div class="tl-item" data-delay="200">
@@ -561,9 +626,54 @@ textarea.form-input{min-height:70px;resize:none}
         <div class="brands-more reveal">+ 20 more brands in our catalog</div>
       </div>
 
-      <!-- S4: Stats -->
-      <div class="section stats" id="s3">
-        <div class="section-label reveal">04 &mdash; Scale</div>
+      <!-- S4: Network Map -->
+      <div class="section network" id="s3">
+        <div class="section-label reveal">04 &mdash; Reach</div>
+        <h2 class="network-heading reveal">From Malta<br>to <span style="color:var(--accent)">everywhere</span>.</h2>
+        <p class="network-sub reveal">One island, one warehouse, an entire continent covered.</p>
+
+        <div class="net-map reveal" id="netMap">
+          <svg viewBox="0 0 270 320" preserveAspectRatio="xMidYMid meet">
+            <line class="net-line" x1="140" y1="262" x2="75" y2="88"/>
+            <line class="net-line" x1="140" y1="262" x2="86" y2="128"/>
+            <line class="net-line" x1="140" y1="262" x2="148" y2="102"/>
+            <line class="net-line" x1="140" y1="262" x2="108" y2="82"/>
+            <line class="net-line" x1="140" y1="262" x2="48" y2="185"/>
+            <line class="net-line" x1="140" y1="262" x2="140" y2="176"/>
+            <line class="net-line" x1="140" y1="262" x2="122" y2="166"/>
+            <line class="net-line" x1="140" y1="262" x2="184" y2="96"/>
+            <line class="net-line" x1="140" y1="262" x2="148" y2="32"/>
+            <line class="net-line" x1="140" y1="262" x2="175" y2="208"/>
+          </svg>
+          <div class="net-city net-malta" style="left:52%;top:82%"><div class="net-dot"></div><div class="net-label">Malta</div></div>
+          <div class="net-city" data-delay="100" style="left:28%;top:28%"><div class="net-dot"></div><div class="net-label">London</div></div>
+          <div class="net-city" data-delay="200" style="left:32%;top:40%"><div class="net-dot"></div><div class="net-label">Paris</div></div>
+          <div class="net-city" data-delay="300" style="left:55%;top:32%"><div class="net-dot"></div><div class="net-label">Berlin</div></div>
+          <div class="net-city" data-delay="400" style="left:40%;top:26%"><div class="net-dot"></div><div class="net-label">Amsterdam</div></div>
+          <div class="net-city" data-delay="150" style="left:18%;top:58%"><div class="net-dot"></div><div class="net-label">Madrid</div></div>
+          <div class="net-city" data-delay="250" style="left:52%;top:55%"><div class="net-dot"></div><div class="net-label">Rome</div></div>
+          <div class="net-city" data-delay="350" style="left:45%;top:52%"><div class="net-dot"></div><div class="net-label">Milan</div></div>
+          <div class="net-city" data-delay="450" style="left:68%;top:30%"><div class="net-dot"></div><div class="net-label">Warsaw</div></div>
+          <div class="net-city" data-delay="500" style="left:55%;top:10%"><div class="net-dot"></div><div class="net-label">Stockholm</div></div>
+          <div class="net-city" data-delay="350" style="left:65%;top:65%"><div class="net-dot"></div><div class="net-label">Athens</div></div>
+        </div>
+        <div class="net-stat reveal"><span>10+</span> countries served from a single hub</div>
+      </div>
+
+      <!-- S5: Device Rain -->
+      <div class="section rain" id="s4">
+        <canvas class="rain-canvas" id="rainCanvas"></canvas>
+        <div class="rain-content">
+          <div class="section-label reveal">05 &mdash; Volume</div>
+          <div class="rain-num reveal" data-target="1000000" id="rainCounter">0</div>
+          <div class="rain-label reveal">Phones distributed</div>
+          <div class="rain-desc reveal">Every number is a device that reached a retailer's shelf, powered on, and changed hands. That's the scale we operate at.</div>
+        </div>
+      </div>
+
+      <!-- S6: Stats -->
+      <div class="section stats" id="s5">
+        <div class="section-label reveal">06 &mdash; Scale</div>
         <h2 class="stats-heading reveal">Numbers that<br>speak.</h2>
         <p class="stats-sub reveal">Built over three decades of relentless execution.</p>
 
@@ -572,18 +682,14 @@ textarea.form-input{min-height:70px;resize:none}
           <div class="stat-label">Years in the business</div>
         </div>
         <div class="stat-block reveal">
-          <div class="stat-num blue" data-target="1" data-suffix="M+">0</div>
-          <div class="stat-label">Phones distributed</div>
-        </div>
-        <div class="stat-block reveal">
-          <div class="stat-num white" data-target="20" data-suffix="+">0</div>
+          <div class="stat-num blue" data-target="20" data-suffix="+">0</div>
           <div class="stat-label">Brand partnerships</div>
         </div>
       </div>
 
       <!-- S5: Contact -->
-      <div class="section contact" id="s4">
-        <div class="section-label reveal">05 &mdash; Connect</div>
+      <div class="section contact" id="s6">
+        <div class="section-label reveal">07 &mdash; Connect</div>
         <h2 class="contact-heading reveal">Start the<br><span style="color:var(--accent)">conversation</span>.</h2>
         <p class="contact-sub reveal">Whether you run a single-location shop or a multi-country retail chain, we have the inventory, pricing, and logistics to make your phone department the most profitable corner of your store.</p>
 
@@ -663,7 +769,7 @@ textarea.form-input{min-height:70px;resize:none}
   const phrases = [
     "Europe's largest independent mobile phone distributor.",
     "30+ years supplying retailers across the continent.",
-    "From Milan to the world — authorized, certified, trusted."
+    "From Malta to the world — authorized, certified, trusted."
   ];
   let phraseIdx = 0, charIdx = 0, deleting = false;
   const tw = document.getElementById('typewriter');
@@ -692,7 +798,7 @@ textarea.form-input{min-height:70px;resize:none}
   setTimeout(typeStep, 800);
 
   /* ── SCROLL-BASED REVEALS (transforms break IntersectionObserver root) ── */
-  const allRevealable = screen.querySelectorAll('.reveal, .tl-item, .brand-card');
+  const allRevealable = screen.querySelectorAll('.reveal, .tl-item, .brand-card, .net-city:not(.net-malta)');
   const statNums = screen.querySelectorAll('.stat-num[data-target]');
 
   function isInScreen(el){
@@ -727,6 +833,16 @@ textarea.form-input{min-height:70px;resize:none}
         })();
       }
     });
+    // Device rain activation
+    const rainSection = document.getElementById('s4');
+    if(rainSection && isInScreen(rainSection)){
+      if(!rainActive){
+        rainActive = true;
+        initRain();
+        requestAnimationFrame(drawRain);
+      }
+      startRainCounter();
+    }
     // Active section for nav dots
     let activeIdx = 0;
     sections.forEach((s,i)=>{
@@ -793,6 +909,75 @@ textarea.form-input{min-height:70px;resize:none}
       phone.style.transform = `rotateY(${dx*8}deg) rotateX(${-dy*10}deg)`;
     });
   }
+
+  /* ── DEVICE RAIN CANVAS ── */
+  const rainCvs = document.getElementById('rainCanvas');
+  const rainCtx = rainCvs.getContext('2d');
+  let rainActive = false;
+  const phones = [];
+
+  function initRain(){
+    const rect = rainCvs.parentElement.getBoundingClientRect();
+    rainCvs.width = rect.width;
+    rainCvs.height = rect.height;
+    for(let i=0;i<60;i++){
+      phones.push({
+        x: Math.random()*rainCvs.width,
+        y: Math.random()*rainCvs.height*2 - rainCvs.height,
+        w: 8 + Math.random()*10,
+        h: 16 + Math.random()*20,
+        speed: 0.3 + Math.random()*0.8,
+        opacity: 0.04 + Math.random()*0.12,
+        color: Math.random()>0.7 ? 'rgba(255,77,0,' : 'rgba(255,255,255,'
+      });
+    }
+  }
+
+  function drawRain(){
+    if(!rainActive) return;
+    rainCtx.clearRect(0,0,rainCvs.width,rainCvs.height);
+    phones.forEach(p=>{
+      p.y += p.speed;
+      if(p.y > rainCvs.height + 40){
+        p.y = -40;
+        p.x = Math.random()*rainCvs.width;
+      }
+      rainCtx.strokeStyle = p.color + p.opacity + ')';
+      rainCtx.lineWidth = 0.5;
+      rainCtx.beginPath();
+      rainCtx.roundRect(p.x - p.w/2, p.y - p.h/2, p.w, p.h, 2);
+      rainCtx.stroke();
+      // Screen line
+      rainCtx.fillStyle = p.color + (p.opacity*0.3) + ')';
+      rainCtx.fillRect(p.x - p.w/2 + 1, p.y - p.h/2 + 2, p.w - 2, p.h * 0.7);
+    });
+    requestAnimationFrame(drawRain);
+  }
+
+  /* ── RAIN COUNTER (1M+) ── */
+  const rainCounter = document.getElementById('rainCounter');
+  let rainCounted = false;
+
+  function startRainCounter(){
+    if(rainCounted) return;
+    rainCounted = true;
+    let current = 0;
+    const target = 1000000;
+    const duration = 2000;
+    const start = performance.now();
+    (function countUp(now){
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      current = Math.floor(eased * target);
+      rainCounter.textContent = current.toLocaleString() + '+';
+      if(progress < 1) requestAnimationFrame(countUp);
+    })(performance.now());
+  }
+
+  /* ── NETWORK CITY REVEALS ── */
+  const netCities = screen.querySelectorAll('.net-city:not(.net-malta)');
 
   /* ── CONTACT FORM ── */
   document.getElementById('contactForm').addEventListener('submit',function(ev){
