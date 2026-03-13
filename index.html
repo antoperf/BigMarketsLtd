@@ -1106,17 +1106,17 @@ textarea.form-input{min-height:70px;resize:none}
       document.body.classList.remove('m-intro');
       onScroll();
     }
-    var phone = document.querySelector('.phone');
-    if(phone){
+    var introPhone = document.querySelector('.phone');
+    if(introPhone){
       function onEnd(e){
         if(e.animationName==='phoneZoom'||e.animationName==='-webkit-phoneZoom'){
-          phone.removeEventListener('animationend', onEnd);
-          phone.removeEventListener('webkitAnimationEnd', onEnd);
+          introPhone.removeEventListener('animationend', onEnd);
+          introPhone.removeEventListener('webkitAnimationEnd', onEnd);
           clearIntro();
         }
       }
-      phone.addEventListener('animationend', onEnd);
-      phone.addEventListener('webkitAnimationEnd', onEnd);
+      introPhone.addEventListener('animationend', onEnd);
+      introPhone.addEventListener('webkitAnimationEnd', onEnd);
     }
     setTimeout(clearIntro, 2600);
   }
