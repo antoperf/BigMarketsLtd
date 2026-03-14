@@ -486,84 +486,24 @@ textarea.form-input{min-height:70px;resize:none}
   .stat-num{font-size:36px}
   .contact-form input,.contact-form textarea{font-size:16px}
 
-  /* ── MOBILE INTRO — GPU-only: transform + opacity ── */
+  /* ── MOBILE INTRO — simple fade-in ── */
   body.m-intro{overflow:hidden;height:100vh;height:100svh}
-  body.m-intro .phone-wrapper{
-    position:fixed;top:0;left:0;
-    width:100vw;height:100vh;height:100svh;z-index:10;
+  body.m-intro .hero{
+    min-height:100vh;min-height:100svh;
+    padding-top:25vh;justify-content:flex-start;
   }
-  body.m-intro .phone{
-    width:100%;height:100%;
-    border:1.5px solid #3a3a3e;
-    background:linear-gradient(145deg,#1a1a1e 0%,#111114 50%,#0d0d10 100%);
-    border-radius:40px;
-    transform-origin:center center;
-    will-change:transform;
-    -webkit-animation:phoneZoom 2.4s cubic-bezier(0.25,0.1,0.25,1) forwards;
-    animation:phoneZoom 2.4s cubic-bezier(0.25,0.1,0.25,1) forwards;
+  body.m-intro .hero .reveal{
+    opacity:0;transform:translateY(20px);
+    animation:introFadeIn 1s ease forwards;
   }
-  @-webkit-keyframes phoneZoom{
-    0%,30%{-webkit-transform:scale(0.55);transform:scale(0.55);border-radius:40px}
-    100%{-webkit-transform:scale(1);transform:scale(1);border-radius:0}
+  body.m-intro .hero .reveal:nth-child(1){animation-delay:0.2s}
+  body.m-intro .hero .reveal:nth-child(2){animation-delay:0.4s}
+  body.m-intro .hero .reveal:nth-child(3){animation-delay:0.6s}
+  body.m-intro .hero .reveal:nth-child(4){animation-delay:0.8s}
+  @keyframes introFadeIn{
+    to{opacity:1;transform:translateY(0)}
   }
-  @keyframes phoneZoom{
-    0%,30%{transform:scale(0.55);border-radius:40px}
-    100%{transform:scale(1);border-radius:0}
-  }
-  /* nebula glow */
-  body.m-intro .phone-wrapper::before{
-    content:'';position:absolute;
-    top:50%;left:50%;transform:translate(-50%,-50%);
-    width:70%;height:60%;z-index:-1;
-    border-radius:50%;
-    background:
-      radial-gradient(circle at 35% 40%, rgba(255,77,0,0.28) 0%, transparent 55%),
-      radial-gradient(circle at 70% 55%, rgba(140,40,220,0.22) 0%, transparent 50%),
-      radial-gradient(circle at 50% 70%, rgba(60,80,255,0.14) 0%, transparent 55%);
-    filter:blur(40px);-webkit-filter:blur(40px);
-    -webkit-animation:nebulaFade 2.4s ease forwards;
-    animation:nebulaFade 2.4s ease forwards;
-  }
-  @-webkit-keyframes nebulaFade{
-    0%,30%{opacity:1}
-    65%,100%{opacity:0}
-  }
-  @keyframes nebulaFade{
-    0%,30%{opacity:1}
-    65%,100%{opacity:0}
-  }
-  body.m-intro .phone-edge{display:block;-webkit-animation:nebulaFade 2.4s ease forwards;animation:nebulaFade 2.4s ease forwards}
-  body.m-intro .phone::before{
-    position:absolute;top:12px;left:50%;transform:translateX(-50%);
-    width:80px;height:26px;background:#000;border-radius:14px;z-index:30;
-  }
-  body.m-intro .phone::after{
-    display:block;
-    content:'';position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
-    width:100px;height:4px;background:#333;border-radius:3px;z-index:30;
-    -webkit-animation:nebulaFade 2.4s ease forwards;animation:nebulaFade 2.4s ease forwards;
-  }
-  body.m-intro .phone-reflection{display:block;-webkit-animation:nebulaFade 2.4s ease forwards;animation:nebulaFade 2.4s ease forwards}
-  body.m-intro .screen{
-    position:absolute;top:6px;right:6px;bottom:6px;left:6px;
-    overflow:hidden;border-radius:34px;
-    -webkit-animation:screenZoom 2.4s cubic-bezier(0.25,0.1,0.25,1) forwards;
-    animation:screenZoom 2.4s cubic-bezier(0.25,0.1,0.25,1) forwards;
-  }
-  @-webkit-keyframes screenZoom{
-    0%,30%{top:6px;right:6px;bottom:6px;left:6px;border-radius:34px}
-    100%{top:0;right:0;bottom:0;left:0;border-radius:0}
-  }
-  @keyframes screenZoom{
-    0%,30%{top:6px;right:6px;bottom:6px;left:6px;border-radius:34px}
-    100%{top:0;right:0;bottom:0;left:0;border-radius:0}
-  }
-  body.m-intro .section{min-height:100%;overflow:hidden}
-  body.m-intro .hero{min-height:100%;padding-top:56px;justify-content:center}
-  body.m-intro .atmo{display:block !important;-webkit-animation:nebulaFade 2.4s ease forwards;animation:nebulaFade 2.4s ease forwards}
-  body.m-intro .stars-canvas{display:block !important;-webkit-animation:nebulaFade 2.4s ease forwards;animation:nebulaFade 2.4s ease forwards}
   body.m-intro .nav-dots-mobile{display:none !important}
-  body.m-intro .hero .reveal{opacity:1;transform:translateY(0)}
   /* ── MOBILE TEXT TRANSITIONS — fade in + slide up ── */
   .section .reveal{
     transition:opacity 0.5s ease-in, transform 0.5s ease-in;
@@ -1098,27 +1038,11 @@ textarea.form-input{min-height:70px;resize:none}
 
   /* ── MOBILE INTRO ── */
   if(document.body.classList.contains('m-intro')){
-    var introCleared = false;
-    function clearIntro(){
-      if(introCleared) return;
-      introCleared = true;
-      window.scrollTo(0,0);
+    setTimeout(function(){
       document.body.classList.remove('m-intro');
+      window.scrollTo(0,0);
       onScroll();
-    }
-    var introPhone = document.querySelector('.phone');
-    if(introPhone){
-      function onEnd(e){
-        if(e.animationName==='phoneZoom'||e.animationName==='-webkit-phoneZoom'){
-          introPhone.removeEventListener('animationend', onEnd);
-          introPhone.removeEventListener('webkitAnimationEnd', onEnd);
-          clearIntro();
-        }
-      }
-      introPhone.addEventListener('animationend', onEnd);
-      introPhone.addEventListener('webkitAnimationEnd', onEnd);
-    }
-    setTimeout(clearIntro, 2600);
+    }, 2000);
   }
 
 })();
